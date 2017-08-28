@@ -57,13 +57,46 @@
 			</office:settings>
 
 			<office:automatic-styles>
+				<!-- Cel stijl 'vet' voor kolomtitels -->
 				<style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
 					<style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
 				</style:style>
 
+				<!-- Stijl 'twee decimalen' voor getallen -->
 				<number:number-style style:name="N2">
-					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:grouping="true"/>
+					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
 				</number:number-style>
+				
+				<!-- Stijl 'yyyy-mm-dd' voor datums -->
+				<number:date-style style:name="D8" number:automatic-order="true">
+					<number:day number:style="long"/>
+					<number:text>-</number:text>
+					<number:month number:style="long"/>
+					<number:text>-</number:text>
+					<number:year number:style="long"/>
+				</number:date-style>
+				
+				<!--Stijl 'twee decimalen, geen nullen' voor getallen -->
+				<number:number-style style:name="N107P0" style:volatile="true">
+					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+				</number:number-style>
+				<!-- rood voor negatieve getallen -->
+				<number:number-style style:name="N107P1" style:volatile="true">
+					<style:text-properties fo:color="#ff0000"/> 
+					<number:text>-</number:text>
+					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+				</number:number-style>
+				<!-- kies streepje '-' voor nul, rood voor negatief, normaal voor positieve getallen -->
+				<number:number-style style:name="N107">
+					<number:text> - </number:text>
+					<style:map style:condition="value()&gt;0" style:apply-style-name="N107P0"/>
+					<style:map style:condition="value()&lt;0" style:apply-style-name="N107P1"/>
+				</number:number-style>
+				
+				<!-- Cel stijlen maken van de getal- en datum stijlen -->
+		    <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N107"/>
+		    <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="D8"/>
+				
 			</office:automatic-styles>
 
 			<office:body>
@@ -85,11 +118,11 @@
 							</table:table-row>
 							<table:table-row>
 								<table:table-cell table:style-name="ce1"><text:p>startDate</text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:startDate"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:startDate"/></xsl:attribute><text:p><xsl:value-of select="xaf:startDate"/></text:p></table:table-cell>
 							</table:table-row>
 							<table:table-row>
 								<table:table-cell table:style-name="ce1"><text:p>endDate</text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:endDate"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:endDate"/></xsl:attribute><text:p><xsl:value-of select="xaf:endDate"/></text:p></table:table-cell>
 							</table:table-row>
 							<table:table-row>
 								<table:table-cell table:style-name="ce1"><text:p>curCode</text:p></table:table-cell>
@@ -97,7 +130,7 @@
 							</table:table-row>
 							<table:table-row>
 								<table:table-cell table:style-name="ce1"><text:p>dateCreated</text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:dateCreated"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:dateCreated"/></xsl:attribute><text:p><xsl:value-of select="xaf:dateCreated"/></text:p></table:table-cell>
 							</table:table-row>
 							<table:table-row>
 								<table:table-cell table:style-name="ce1"><text:p>softwareDesc</text:p></table:table-cell>
@@ -148,7 +181,7 @@
 								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:city"/></text:p></table:table-cell>
 							</table:table-row>
 							<table:table-row>
-								<table:table-cell><text:p>strAddr_postalCode</text:p></table:table-cell>
+								<table:table-cell table:style-name="ce1"><text:p>strAddr_postalCode</text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:postalCode"/></text:p></table:table-cell>
 							</table:table-row>
 							<table:table-row>
@@ -249,10 +282,10 @@
 
 						<xsl:for-each select="xaf:auditfile/xaf:company/xaf:vatCodes/xaf:vatCode">
 							<table:table-row>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:vatID"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:vatDesc"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:vatToPayAccID"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:vatToClaimAccID"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:vatID"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:vatDesc"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:vatToPayAccID"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:vatToClaimAccID"/></text:p></table:table-cell>
 							</table:table-row>
 						</xsl:for-each>
 
@@ -276,9 +309,9 @@
 							<table:table-row>
 								<table:table-cell><text:p><xsl:value-of select="xaf:periodNumber"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:periodDesc"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:startDatePeriod"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:startDatePeriod"/></xsl:attribute><text:p><xsl:value-of select="xaf:startDatePeriod"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:startTimePeriod"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:endDatePeriod"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:endDatePeriod"/></xsl:attribute><text:p><xsl:value-of select="xaf:endDatePeriod"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:endTimePeriod"/></text:p></table:table-cell>
 							</table:table-row>
 						</xsl:for-each>
@@ -299,11 +332,11 @@
 						</table:table-header-rows>
 						<xsl:for-each select="xaf:auditfile/xaf:company/xaf:openingBalance">
 							<table:table-row>
-								<table:table-cell><text:p><xsl:value-of select="xaf:opBalDate"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:opBalDate"/></xsl:attribute><text:p><xsl:value-of select="xaf:opBalDate"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:opBalDesc"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:linesCount"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:totalDebit"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:totalCredit"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:totalDebit"/></xsl:attribute><text:p><xsl:value-of select="xaf:totalDebit"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:totalCredit"/></xsl:attribute><text:p><xsl:value-of select="xaf:totalCredit"/></text:p></table:table-cell>
 							</table:table-row>
 						</xsl:for-each>
 
@@ -327,9 +360,9 @@
 							<table:table-row>
 								<table:table-cell><text:p><xsl:value-of select="xaf:nr"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:accID"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="../xaf:opBalDate"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="../xaf:opBalDate"/></xsl:attribute><text:p><xsl:value-of select="../xaf:opBalDate"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="../xaf:opBalDesc"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:amnt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:amnt"/></xsl:attribute><text:p><xsl:value-of select="xaf:amnt"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:amntTp"/></text:p></table:table-cell>
 							</table:table-row>
 						</xsl:for-each>
@@ -369,29 +402,29 @@
 						</table:table-header-rows>
 						<xsl:for-each select="xaf:auditfile/xaf:company/xaf:customersSuppliers/xaf:customerSupplier">
 							<table:table-row>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:custSupID"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:custSupName"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:contact"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:telephone"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:fax"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:eMail"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:website"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:commerceNr"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:taxRegistrationCountry"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:taxRegIdent"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:relationshipID"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:custSupTp"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:custSupGrpID"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:custCreditLimit"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:supplierLimit"/></text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:streetname"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:number"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:numberExtension"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:city"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:postalCode"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:country"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:bankAccount[1]/xaf:bankAccNr"/> </text:p></table:table-cell>
-								<table:table-cell table:style-name="ce1"><text:p><xsl:value-of select="xaf:bankAccount[1]/xaf:bankIdCd"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:custSupID"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:custSupName"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:contact"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:telephone"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:fax"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:eMail"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:website"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:commerceNr"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:taxRegistrationCountry"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:taxRegIdent"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:relationshipID"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:custSupTp"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:custSupGrpID"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:custCreditLimit"/></xsl:attribute><text:p><xsl:value-of select="xaf:custCreditLimit"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:supplierLimit"/></xsl:attribute><text:p><xsl:value-of select="xaf:supplierLimit"/></text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:streetname"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:number"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:numberExtension"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:city"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:postalCode"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:streetAddress[1]/xaf:country"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:bankAccount[1]/xaf:bankAccNr"/> </text:p></table:table-cell>
+								<table:table-cell><text:p><xsl:value-of select="xaf:bankAccount[1]/xaf:bankIdCd"/> </text:p></table:table-cell>
 							</table:table-row>
 						</xsl:for-each>
 
@@ -411,8 +444,8 @@
 						<xsl:for-each select="xaf:auditfile/xaf:company/xaf:transactions">
 							<table:table-row>
 								<table:table-cell><text:p><xsl:value-of select="xaf:linesCount"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:totalDebit"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:totalCredit"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:totalDebit"/></xsl:attribute><text:p><xsl:value-of select="xaf:totalDebit"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:totalCredit"/></xsl:attribute><text:p><xsl:value-of select="xaf:totalCredit"/></text:p></table:table-cell>
 							</table:table-row>
 						</xsl:for-each>
 
@@ -470,8 +503,8 @@
 								<table:table-cell><text:p><xsl:value-of select="xaf:nr"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:desc"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:periodNumber"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:trDt"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:amnt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:trDt"/></xsl:attribute><text:p><xsl:value-of select="xaf:trDt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:amnt"/></xsl:attribute><text:p><xsl:value-of select="xaf:amnt"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:amntTp"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:sourceID"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:userID"/></text:p></table:table-cell>
@@ -541,15 +574,16 @@
 								<table:table-cell><text:p><xsl:value-of select="../xaf:nr"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="../xaf:desc"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="../xaf:periodNumber"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="../xaf:trDt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="../xaf:trDt"/></xsl:attribute><text:p><xsl:value-of select="../xaf:trDt"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="../xaf:sourceID"/></text:p></table:table-cell>
 
 								<table:table-cell><text:p><xsl:value-of select="xaf:nr"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:accID"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:docRef"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:effDate"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="date" table:style-name="ce3"><xsl:attribute name="office:date-value"><xsl:value-of select="xaf:effDate"/></xsl:attribute><text:p><xsl:value-of select="xaf:effDate"/></text:p></table:table-cell>
+
 								<table:table-cell><text:p><xsl:value-of select="xaf:desc"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:amnt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:amnt"/></xsl:attribute><text:p><xsl:value-of select="xaf:amnt"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:amntTp"/></text:p></table:table-cell>
 
 								<table:table-cell><text:p><xsl:value-of select="xaf:recRef"/></text:p></table:table-cell>
@@ -573,25 +607,18 @@
 								<table:table-cell><text:p><xsl:value-of select="xaf:bankIdCd"/></text:p></table:table-cell>
 
 								<table:table-cell><text:p><xsl:value-of select="xaf:vat[1]/xaf:vatID"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:vat[1]/xaf:vatPerc"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:vat[1]/xaf:vatAmnt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:vat[1]/xaf:vatPerc"/></xsl:attribute><text:p><xsl:value-of select="xaf:vat[1]/xaf:vatPerc"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:vat[1]/xaf:vatAmnt"/></xsl:attribute><text:p><xsl:value-of select="xaf:vat[1]/xaf:vatAmnt"/></text:p></table:table-cell>
 								<table:table-cell><text:p><xsl:value-of select="xaf:vat[1]/xaf:vatAmntTp"/></text:p></table:table-cell>
 
 								<table:table-cell><text:p><xsl:value-of select="xaf:currency[1]/xaf:curCode"/></text:p></table:table-cell>
-								<table:table-cell><text:p><xsl:value-of select="xaf:currency[1]/xaf:curAmnt"/></text:p></table:table-cell>
+								<table:table-cell office:value-type="float" table:style-name="ce2"><xsl:attribute name="office:value"><xsl:value-of select="xaf:currency[1]/xaf:curAmnt"/></xsl:attribute><text:p><xsl:value-of select="xaf:currency[1]/xaf:curAmnt"/></text:p></table:table-cell>
 
 							</table:table-row>
 						</xsl:for-each>
 
 					</table:table>
 					<!-- Einde van werkblad Company -->
-
-
-
-
-
-
-
 
 
 				</office:spreadsheet>

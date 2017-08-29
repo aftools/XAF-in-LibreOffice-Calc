@@ -22,6 +22,7 @@
 			xmlns:math="http://www.w3.org/1998/Math/MathML"
 			xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
 			xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
+			xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" 
 			xmlns:ooo="http://openoffice.org/2004/office"
 			xmlns:ooow="http://openoffice.org/2004/writer"
 			xmlns:oooc="http://openoffice.org/2004/calc"
@@ -38,12 +39,70 @@
 						<config:config-item-map-entry>
 							<config:config-item-map-named config:name="Tables">
 
+								<!-- Eerste rij vastzetten voor tabel 'ledgerAccount' -->
 								<config:config-item-map-entry config:name="ledgerAccount">
 									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
 									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
 									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
 								</config:config-item-map-entry>
 
+								<!-- Eerste rij vastzetten voor tabel 'taxonomy' -->
+								<config:config-item-map-entry config:name="taxonomy">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'basic' -->
+								<config:config-item-map-entry config:name="basic">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'vatCode' -->
+								<config:config-item-map-entry config:name="vatCode">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'period' -->
+								<config:config-item-map-entry config:name="period">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'obLine' -->
+								<config:config-item-map-entry config:name="obLine">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'customerSupplier' -->
+								<config:config-item-map-entry config:name="customerSupplier">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'journal' -->
+								<config:config-item-map-entry config:name="journal">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'transaction' -->
+								<config:config-item-map-entry config:name="transaction">
+									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
+									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
+									<config:config-item config:name="PositionBottom" config:type="int">1</config:config-item>
+								</config:config-item-map-entry>
+
+								<!-- Eerste rij vastzetten voor tabel 'trLine' -->
 								<config:config-item-map-entry config:name="trLine">
 									<config:config-item config:name="VerticalSplitMode" config:type="short">2</config:config-item>
 									<config:config-item config:name="VerticalSplitPosition" config:type="int">1</config:config-item>
@@ -64,7 +123,7 @@
 
 				<!-- Stijl 'twee decimalen' voor getallen -->
 				<number:number-style style:name="N2">
-					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+					<number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
 				</number:number-style>
 				
 				<!-- Stijl 'yyyy-mm-dd' voor datums -->
@@ -78,13 +137,13 @@
 				
 				<!--Stijl 'twee decimalen, geen nullen' voor getallen -->
 				<number:number-style style:name="N107P0" style:volatile="true">
-					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+					<number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
 				</number:number-style>
 				<!-- rood voor negatieve getallen -->
 				<number:number-style style:name="N107P1" style:volatile="true">
 					<style:text-properties fo:color="#ff0000"/> 
 					<number:text>-</number:text>
-					<number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+					<number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
 				</number:number-style>
 				<!-- kies streepje '-' voor nul, rood voor negatief, normaal voor positieve getallen -->
 				<number:number-style style:name="N107">
